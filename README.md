@@ -2,7 +2,7 @@
 
 This project demonstrates how to set up and use the MySQL Java Connector to connect to a MySQL database using Java.
 
-## Step 1: Setting up MySQL Java Connector
+## Step 1: Setting up the MySQL Java Connector
 
 1. **Create a Database:**
 
@@ -12,7 +12,7 @@ This project demonstrates how to set up and use the MySQL Java Connector to conn
     CREATE DATABASE coursejdbc;
     ```
 
-2. **Download MySQL Java Connector:**
+2. **Download the MySQL Java Connector:**
 
     - Download the MySQL Java Connector from the [MySQL website](https://dev.mysql.com/downloads/connector/j/).
     - Select the "Platform Independent" option and download the `.zip` file.
@@ -50,7 +50,7 @@ This project demonstrates how to set up and use the MySQL Java Connector to conn
 
 ## Step 2: Setting up the Database Connection
 
-1. **Create `db.properties` File:**
+1. **Create the `db.properties` File:**
 
     In the root directory of the `src` folder, create a new file named `db.properties` and add the following content:
 
@@ -80,66 +80,13 @@ This project demonstrates how to set up and use the MySQL Java Connector to conn
 
     - In the `db` package, create a class named `DB` and add the following methods:
 
-      ```java
-      package db;
+### Method `getConnection`:
 
-      import java.io.FileInputStream;
-      import java.io.IOException;
-      import java.sql.Connection;
-      import java.sql.DriverManager;
-      import java.sql.SQLException;
-      import java.util.Properties;
-
-      public class DB {
-          private static Connection conn = null;
-
-          public static Connection getConnection() {
-              if (conn == null) {
-                  try {
-                      Properties props = loadProperties();
-                      String url = props.getProperty("dburl");
-                      conn = DriverManager.getConnection(url, props);
-                  } catch (SQLException e) {
-                      throw new DbException(e.getMessage());
-                  }
-              }
-              return conn;
-          }
-
-          public static void closeConnection() {
-              if (conn != null) {
-                  try {
-                      conn.close();
-                  } catch (SQLException e) {
-                      throw new DbException(e.getMessage());
-                  }
-              }
-          }
-
-          private static Properties loadProperties() {
-              try (FileInputStream fileInput = new FileInputStream("db.properties")) {
-                  Properties properties = new Properties();
-                  properties.load(fileInput);
-                  return properties;
-              } catch (IOException e) {
-                  throw new DbException(e.getMessage());
-              }
-          }
-      }
-      ```
-
-4. **Overview of the `DB` Class:**
-
-    - The `DB` class contains methods to connect to and disconnect from the database, as well as to load database properties from the `db.properties` file.
-    - It uses the `DbException` class to handle any exceptions that occur during database operations.
-
-## Complete `DB` Class Code:
+This method establishes a connection with the database.
 
 ```java
 package db;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -160,24 +107,55 @@ public class DB {
         }
         return conn;
     }
+}
+```
+Explanation:
 
-    public static void closeConnection() {
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                throw new DbException(e.getMessage());
-            }
-        }
-    }
+- Checks if the connection (`conn`) is null.
+- Loads the database properties using the `loadProperties()` method.
+- Gets the database URL from the properties.
+- Establishes the connection with the database using `DriverManager.getConnection`.
+- If a `SQLException` occurs, it throws a `DbException` with the error message.
 
-    private static Properties loadProperties() {
-        try (FileInputStream fileInput = new FileInputStream("db.properties")) {
-            Properties properties = new Properties();
-            properties.load(fileInput);
-            return properties;
-        } catch (IOException e) {
+## Method `closeConnection`:
+
+This method closes the connection with the database.
+
+```java
+public static void closeConnection() {
+    if (conn != null) {
+        try {
+            conn.close();
+        } catch (SQLException e) {
             throw new DbException(e.getMessage());
         }
     }
 }
+```
+Explanation:
+
+- Checks if the connection (`conn`) is not null.
+- Closes the connection.
+- If a `SQLException` occurs, it throws a `DbException` with the error message.
+
+## Method `loadProperties`:
+
+This method loads the properties from the `db.properties` file.
+
+```java
+private static Properties loadProperties() {
+    try (FileInputStream fileInput = new FileInputStream("db.properties")) {
+        Properties properties = new Properties();
+        properties.load(fileInput);
+        return properties;
+    } catch (IOException e) {
+        throw new DbException(e.getMessage());
+    }
+}
+```
+Explanation:
+
+- Opens the `db.properties` file using a `FileInputStream`.
+- Loads the properties from the file.
+- Returns the loaded properties.
+- If an `IOException` occurs, it throws a `DbException` with the error message.
