@@ -159,3 +159,58 @@ Explanation:
 - Loads the properties from the file.
 - Returns the loaded properties.
 - If an `IOException` occurs, it throws a `DbException` with the error message.
+
+4. **Overview of the `DB` Class:**
+
+    - The `DB` class contains methods to connect to and disconnect from the database, as well as to load database properties from the `db.properties` file.
+    - It uses the `DbException` class to handle any exceptions that occur during database operations.
+
+## Complete `DB` Class Code:
+
+```java
+package db;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+
+public class DB {
+    private static Connection conn = null;
+
+    public static Connection getConnection() {
+        if (conn == null) {
+            try {
+                Properties props = loadProperties();
+                String url = props.getProperty("dburl");
+                conn = DriverManager.getConnection(url, props);
+            } catch (SQLException e) {
+                throw new DbException(e.getMessage());
+            }
+        }
+        return conn;
+    }
+
+    public static void closeConnection() {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                throw new DbException(e.getMessage());
+            }
+        }
+    }
+
+    private static Properties loadProperties() {
+        try (FileInputStream fileInput = new FileInputStream("db.properties")) {
+            Properties properties = new Properties();
+            properties.load(fileInput);
+            return properties;
+        } catch (IOException e) {
+            throw new DbException(e.getMessage());
+        }
+    }
+}
+``
