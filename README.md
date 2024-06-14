@@ -1,4 +1,4 @@
-# MySQL Java Connector Project
+# MySQL Java Connector
 
 This project demonstrates how to set up and use the MySQL Java Connector to connect to a MySQL database using Java.
 
@@ -213,4 +213,11 @@ public class DB {
         }
     }
 }
-``
+```
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or new features.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
