@@ -1,6 +1,6 @@
 # MySQL Java Connector
 
-This project demonstrates how to set up and use the MySQL Java Connector to connect to a MySQL database using Java.
+How to set up and use the MySQL Java Connector to connect to a MySQL database using Java.
 
 ## Step 1: Setting up the MySQL Java Connector
 
